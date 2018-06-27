@@ -34,7 +34,7 @@ function Paddle:init(x, y, width, height)
     self.dy = 0
 end
 
-function Paddle:update(dt)
+function Paddle:update_vert(dt)
     -- math.max here ensures that we're the greater of 0 or the player's
     -- current calculated Y position when pressing up so that we don't
     -- go into the negatives; the movement calculation is simply our
@@ -47,6 +47,22 @@ function Paddle:update(dt)
     -- based on its top left corner)
     else
         self.y = math.min(VIRTUAL_HEIGHT - self.height, self.y + self.dy * dt)
+    end
+end
+
+function Paddle:update_horz(dt)
+    -- math.max here ensures that we're the greater of 0 or the player's
+    -- current calculated X position when pressing up so that we don't
+    -- go into the negatives; the movement calculation is simply our
+    -- previously-defined paddle speed scaled by dt
+    if self.dx < 0 then
+        self.x = math.max(0, self.x + self.dx * dt)
+    -- similar to before, this time we use math.min to ensure we don't
+    -- go any farther than the left of the screen minus the paddle's
+    -- width (or else it will go partially off the screen, since position is
+    -- based on its top left corner)
+    else
+        self.x = math.min(VIRTUAL_WIDTH - self.width, self.x + self.dx * dt)
     end
 end
 
